@@ -52,7 +52,7 @@ def main():
             text = pygame.font.SysFont("comicsans", 30).render("Press ESCAPE to restart", True, "black")
             text_rect = text.get_rect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 + 20))
             win.blit(text, text_rect)
-            score = FONT.render(f"Best Score: {best_score}", True, "white")
+            score = FONT.render(f"Best Score: {best_score}", True, "black")
             score_rect = score.get_rect(center=(WINDOW_WIDTH / 2, 30))
             win.blit(score, score_rect)
             pygame.display.update()
