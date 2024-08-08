@@ -76,6 +76,8 @@ def main():
             draw_window(win, bird, pipes, base, score, best_score)
 
             bird.move()
+            pipe_idx = 0
+
             for pipe in pipes:
                 if pipe.has_collide(bird):
                     bird.has_collide = True
@@ -87,9 +89,9 @@ def main():
                     if best_score <= score:
                         best_score = score
                     pipes.append(Pipe(700))
-                pipe.move()
+                pipe.move()    
 
-            if bird.y + bird.img.get_height() >= base.y:
+            if bird.y + bird.img.get_height() >= base.y or bird.y + bird.img.get_height() <= -300:
                 bird.has_collide = True
 
             if bird.has_collide:
