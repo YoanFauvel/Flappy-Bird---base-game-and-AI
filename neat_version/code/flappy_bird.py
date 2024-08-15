@@ -32,10 +32,11 @@ def main(genomes, config):
     ge = []
     birds = []
 
-    # bird = Bird(200, 200)
     pipes = [Pipe(700)]
     base = Base(730)
     score = 0
+
+    speed_modifier = 1
 
     for _, genome in genomes:
         net = neat.nn.FeedForwardNetwork.create(genome, config)
@@ -46,7 +47,7 @@ def main(genomes, config):
 
     run = True
     while run:
-        clock.tick(300)
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 run = False
@@ -86,7 +87,14 @@ def main(genomes, config):
         
         if add_pipe:
             score += 1
+            speed_modifier = 1 + score / 100
+            print(speed_modifier)
+            base.vel = 3 * speed_modifier
+            print(base.vel)
             pipes.append(Pipe(WINDOW_WIDTH))
+            for pipe in pipes:
+                pipe.vel = 3 * speed_modifier
+                print(pipe.vel)
             for g in ge:
                 g.fitness += 5
 
