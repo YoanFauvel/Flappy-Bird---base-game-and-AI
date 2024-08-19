@@ -10,6 +10,11 @@ ANIMATION_SPEED = 6
 # Setting application path
 application_path = os.path.dirname(os.path.abspath(__file__))
 os.chdir(application_path)
+     
+# BIRD_IMGS = []
+# for i in range(1, 5):
+#     bird_image_path = os.path.join("..", "..", "imgs", f"bird{i}.png")
+#     BIRD_IMGS.append(pygame.transform.scale2x(pygame.image.load(bird_image_path).convert_alpha()))
 
 # Loading images
 # BIRD_IMGS = []
