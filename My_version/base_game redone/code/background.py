@@ -4,7 +4,7 @@ from settings import *
 class BG(pygame.sprite.Sprite):
     def __init__(self, groups):
         # loading images
-        bg_image_path = os.path.join("..", "..", "imgs", "bg.png")
+        bg_image_path = os.path.join("..", "..", "..", "imgs", "bg.png")
         BG_IMG = pygame.transform.scale2x(pygame.image.load(bg_image_path))
 
         # setting the layer

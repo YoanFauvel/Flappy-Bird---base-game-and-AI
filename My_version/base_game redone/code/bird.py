@@ -6,7 +6,7 @@ class Bird(pygame.sprite.Sprite):
         # loading bird images
         BIRD_IMGS = []
         for i in range(1, 5):
-            bird_image_path = os.path.join("..", "..", "imgs", f"bird{i}.png")
+            bird_image_path = os.path.join("..", "..", "..", "imgs", f"bird{i}.png")
             BIRD_IMGS.append(pygame.transform.scale2x(pygame.image.load(bird_image_path)))
 
         # setting layer above background and init class

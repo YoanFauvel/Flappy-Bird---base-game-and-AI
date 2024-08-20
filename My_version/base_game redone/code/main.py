@@ -120,7 +120,7 @@ class Game:
             What to do when game over (draw best score and what to do to restart the game)
         """
 
-        bg_image_path = os.path.join("..", "..", "imgs", "bg.png")
+        bg_image_path = os.path.join("..", "..", "..", "imgs", "bg.png")
         BG_IMG = pygame.transform.scale2x(pygame.image.load(bg_image_path).convert_alpha())
 
         for sprite in self.all_sprites:

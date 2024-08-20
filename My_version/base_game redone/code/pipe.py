@@ -9,7 +9,7 @@ class Pipe(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, groups)
         
         # loading images
-        pipe_image_path = os.path.join("..", "..", "imgs", "pipe.png")
+        pipe_image_path = os.path.join("..", "..", "..", "imgs", "pipe.png")
         PIPE_IMG = pygame.transform.scale2x(pygame.image.load(pipe_image_path))
 
         self.image = PIPE_IMG
