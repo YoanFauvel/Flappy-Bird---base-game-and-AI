@@ -1,6 +1,7 @@
 import pygame
 import random
 from settings import *
+from network import Network
 
 class Bird(pygame.sprite.Sprite):
     def __init__(self, groups):
@@ -15,6 +16,7 @@ class Bird(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, groups)
 
         self.frames = BIRD_IMGS
+        self.group = groups
         self.frame_index = 0
         self.image = self.frames[self.frame_index]
 
@@ -38,6 +40,15 @@ class Bird(pygame.sprite.Sprite):
         self.jump_cooldown = 100
         self.time_since_jump = 0
 
+        self.vision = [0.5, 1, 0.5]
+        self.inputs = 3
+        self.network = Network(self.inputs)
+        self.network.generate_network()
+
+        self.closest_pipe_idx = 0
+
+        self.lifespan = 0
+        self.fitness = 0
     
     def apply_gravity(self, dt):
         """
@@ -53,7 +64,7 @@ class Bird(pygame.sprite.Sprite):
 
     def jump(self):
         if  pygame.time.get_ticks() - self.time_since_jump > self.jump_cooldown:
-            self.decision = random.uniform(0, 1)
+            self.decision = self.network.feed_forward(self.vision)
             if self.decision > 0.75:
                 self.speed = -600
                 self.height = self.pos.y
@@ -88,6 +99,16 @@ class Bird(pygame.sprite.Sprite):
         rotated_bird = pygame.transform.rotozoom(self.image, self.tilt, 1)
         self.image = rotated_bird
         self.mask = pygame.mask.from_surface(self.image)
+    
+    def calculate_fitness(self):
+        self.fitness = self.lifespan
+
+    def clone(self):
+        clone = Bird(self.group)
+        clone.fitness = self.fitness
+        clone.network = self.network.clone()
+        clone.network.generate_network()
+        return clone
 
     def update(self, dt):
         """
@@ -97,3 +118,4 @@ class Bird(pygame.sprite.Sprite):
         self.jump()
         self.animate(dt)
         self.rotate()
+        self.lifespan += 1
