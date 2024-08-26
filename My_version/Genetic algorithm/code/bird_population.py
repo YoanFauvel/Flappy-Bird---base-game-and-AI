@@ -13,29 +13,35 @@ class Bird_Population():
             self.birds.append(Bird(group))
 
     def natural_selection(self):
-        print("SPECIATE")
+        # print("SPECIATE")
         self.speciate()
-        # print(len(self.birds))
+        print(f"Number of species: {len(self.species)}")
 
-        print("CALCULATE FITNESS")
+        # print("CALCULATE FITNESS")
         self.calculate_fitness()
-        # print(len(self.birds))
+        print(f"Best average fitness score: {max([s.average_fitness for s in self.species])}")
+        print("\n-----------------------------------\n")
+        for idx, s in enumerate(self.species):
+            print(f"{len(s.birds)} birds in species number {idx} with average fitness of {s.average_fitness}")
+        print("\n-----------------------------------\n")
 
-        print('KILL EXTINCT')
+        # print('KILL EXTINCT')
         self.kill_extinct_species()
 
-        print('KILL STALE')
+        # print('KILL STALE')
         self.kill_stale_species()
 
-        print("SORT BY FITNESS")
+        # print("SORT BY FITNESS")
         self.sort_species_by_fitness()
-        # print(len(self.birds))
 
-        print("CHILDREN FOR NEXT GEN")
+        # print("CHILDREN FOR NEXT GEN")
         self.next_gen()
-        # print(len(self.birds))
 
     def speciate(self):
+        """
+            Adds the birds to a species if the weights of network do not get bigger than a threshold value, i.e., if they are similar.
+        """
+
         for s in self.species:
             s.birds = []
         for bird in self.birds:
@@ -49,12 +55,20 @@ class Bird_Population():
                 self.species.append(Species(bird))
 
     def calculate_fitness(self):
+        """
+            Self explanatory name...
+        """
+
         for bird in self.birds:
             bird.calculate_fitness()
         for s in self.species:
             s.calculate_average_fitness()
 
     def kill_extinct_species(self):
+        """
+            Self explanatory name...
+        """
+
         species_bin = []
         for s in self.species:
             if len(s.birds) == 0:
@@ -63,6 +77,10 @@ class Bird_Population():
             self.species.remove(s)
 
     def kill_stale_species(self):
+        """
+            Self explanatory name. Kill species that do not show any progress (decided with a threshold value).
+        """
+
         bird_bin = []
         species_bin = []
         for s in self.species:
@@ -79,30 +97,32 @@ class Bird_Population():
             self.species.remove(s)
     
     def sort_species_by_fitness(self):
+        """
+            Put the species with the best average fitness at the beginning of self.species
+        """
+
         for s in self.species:
             s.sort_bird_by_fitness()
         
         self.species.sort(key=operator.attrgetter('benchmark_fitness'), reverse=True)
 
     def next_gen(self):
+        """
+            Function that generate a new generation of bird. To do so, it clones the best birds of each species, then fill in the gap of bird population with new birds
+        """
+
         children = []
-        # print('species', len(self.species))
         for s in self.species:
-            # print(len(s.birds), "birds in species")
             children.append(s.champion.clone())
-        # print("children 1", len(children))
 
         children_per_species = math.floor((self.pop_size - len(self.species)) / len(self.species))
-        # print("children per spec", children_per_species)
         for s in self.species:
             for _ in range(children_per_species):
                 children.append(s.offspring())
 
-        # print("children 2", len(children))
         while len(children) < self.pop_size:
             children.append(self.species[0].offspring())
         
-        # print("children 3", len(children))
 
         self.birds = []
         for child in children:
@@ -110,6 +130,10 @@ class Bird_Population():
         self.generation += 1
 
     def extinct(self):
+        """
+            Check if the total population is extinct.
+        """
+
         extinct = True
         for bird in self.birds:
             if not bird.has_collide:

@@ -7,6 +7,10 @@ class Connection():
         self.weight = weight
     
     def mutate_weight(self):
+        """
+            Modify the weight of the network. There is a 90% chance that this change is "small".
+        """
+
         if random.uniform(0, 1) < 0.1:
             self.weight = random.uniform(-1, 1)
         else:

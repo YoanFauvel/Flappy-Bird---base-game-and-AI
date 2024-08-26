@@ -76,6 +76,10 @@ class Network():
                 return neuron
             
     def mutate(self):
+        """
+            Modify network weight in 80% of cases.
+        """
+
         if random.uniform(0, 1) < 0.8:
             for i in range(len(self.connections)):
                 self.connections[i].mutate_weight()

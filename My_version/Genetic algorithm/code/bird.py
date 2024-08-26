@@ -118,4 +118,4 @@ class Bird(pygame.sprite.Sprite):
         self.jump()
         self.animate(dt)
         self.rotate()
-        self.lifespan += 1
+        self.lifespan += 0.1

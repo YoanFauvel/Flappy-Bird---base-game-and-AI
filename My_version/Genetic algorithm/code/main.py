@@ -1,11 +1,6 @@
-import os
 import pygame
-import time
-import json
-import math
 
 from settings import *
-from bird import Bird
 from background import BG
 from pipe import Pipe 
 from base import Base
@@ -33,6 +28,8 @@ class Game:
         self.font = pygame.font.SysFont("comicsans", 50)
 
         self.add_pipe = False
+
+        self.cycle = 0
 
     def spawn_top_pipes(self, bottom_pipe: object) -> object:
         """
@@ -92,14 +89,14 @@ class Game:
 
         # score setup
         self.score = 0
+        print(f"Beginning of cycle {self.cycle}")
 
     def run(self):
         # sprite setup
         self.init_game()
-        self.birds = Bird_Population(100, self.all_sprites)
+        self.birds = Bird_Population(10, self.all_sprites)
         for bird in self.birds.birds:
             self.all_sprites.add(bird)
-        self.cycle = 0
         run = True
         while run:
             dt = self.clock.tick() / 1000 # setting time step
@@ -114,10 +111,7 @@ class Game:
             if len(self.birds.birds) > 0:
                 if len(self.bottom_pipes) > 1 and self.birds.birds[0].rect.x > self.bottom_pipes[0].rect.x + self.bottom_pipes[0].image.get_width():
                     pipe_idx = 1
-            # else:
-            #     run = False
-            #     break
-            # game logic
+
             self.display_surface.fill("black")
             self.all_sprites.draw(self.display_surface)
 
@@ -125,24 +119,22 @@ class Game:
             score_rect = score_text.get_rect(center=(WINDOW_WIDTH / 2, 30))
             self.display_surface.blit(score_text, score_rect)
             for bird in self.birds.birds:
-                pipe_idx
                 bird.closest_pipe_idx = pipe_idx
                 bird.vision[0] = (bird.rect.center[1] - self.top_pipes[pipe_idx].rect.bottom) / WINDOW_HEIGHT
                 bird.vision[1] = (self.bottom_pipes[pipe_idx].rect.x - bird.rect.center[0]) / WINDOW_WIDTH
                 bird.vision[2] = (self.bottom_pipes[pipe_idx].rect.top - bird.rect.center[1]) / WINDOW_HEIGHT
-                # pygame.draw.line(self.display_surface, "black", bird.rect.center, (bird.rect.center[0], self.bottom_pipes[pipe_idx].rect.top))
-                # pygame.draw.line(self.display_surface, "green", bird.rect.center, (bird.rect.center[0], self.top_pipes[pipe_idx].rect.bottom))
-                # pygame.draw.line(self.display_surface, "red", bird.rect.center, (self.bottom_pipes[pipe_idx].rect.x, bird.rect.center[1]))
                 self.scoring(bird)
                 self.collision_detection(bird)
                 if bird.has_collide:
                     bird.kill()
+
             self.add_pipe = False
             for idx, pipe in enumerate(self.bottom_pipes):
             # delete pipes when they go out of the screen
                 if pipe.rect.x + pipe.image.get_width() < 0:
                         self.bottom_pipes.remove(pipe)
                         self.top_pipes.remove(self.top_pipes[idx])
+
             if self.birds.extinct():
                 self.cycle += 1
                 self.birds.natural_selection()
@@ -151,9 +143,7 @@ class Game:
                 self.init_game()
                 for bird in self.birds.birds:
                     self.all_sprites.add(bird)
-            # print(len(self.birds.birds))
                 
-                # self.init_game()
             self.all_sprites.update(dt)
 
             pygame.display.update()

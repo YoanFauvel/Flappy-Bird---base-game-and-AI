@@ -13,6 +13,10 @@ class Species():
         self.staleness = 0
     
     def similarity(self, network):
+        """
+            Check if the weight difference between two birds is greater than the threshold value.
+        """
+
         similarity = self.weight_difference(self.benchmark_network, network)
         return self.threshold > similarity
     
@@ -29,6 +33,10 @@ class Species():
         self.birds.append(bird)
     
     def sort_bird_by_fitness(self):
+        """
+            Sort the birds by their fitness value and check if they are progressing.
+        """
+
         self.birds.sort(key=operator.attrgetter('fitness'), reverse=True)
         if self.birds[0].fitness > self.benchmark_fitness:
             self.staleness = 0
@@ -38,16 +46,19 @@ class Species():
             self.staleness += 1
 
     def calculate_average_fitness(self):
-        tota_fitness = 0
+        total_fitness = 0
         for bird in self.birds:
-            tota_fitness += bird.fitness
+            total_fitness += bird.fitness
         if self.birds:
-            self.average_fitness = int(tota_fitness / len(self.birds))
+            self.average_fitness = int(total_fitness / len(self.birds))
         else:
             self.average_fitness = 0
 
     def offspring(self):
-        # print("len", len(self.birds))
+        """
+            Create a new bird from an existing one and mutate its network (change of the weights of the network).
+        """
+
         baby = self.birds[random.randint(1, len(self.birds)) - 1].clone()
         baby.network.mutate()
         return baby

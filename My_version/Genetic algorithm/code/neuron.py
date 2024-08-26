@@ -2,6 +2,7 @@ import math
 
 def sigmoid(x):
             return 1 / (1 + math.exp(-x))
+
 class Neuron():
     def __init__(self, id_number: int):
         self.id = id_number
@@ -11,6 +12,10 @@ class Neuron():
         self.connections = []
 
     def activate(self):
+        """
+            Check the position of the neuron in the network and apply to it either a weighted sum or a sigmoid activation function.
+        """
+    
         if self.layer == 1:
             self.output_value = sigmoid(self.input_value)
 
